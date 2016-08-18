@@ -58,3 +58,10 @@ docs/_build/
 # PyBuilder
 target/
 
+LICENSE
+
+# 忽略测试文件
+localtest/
+
+# 忽略的本地配置文件
+local_config.py
