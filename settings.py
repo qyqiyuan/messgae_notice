@@ -9,11 +9,14 @@ DEBUG = True
 TRY_TIME = 5
 
 # 尝试的时间间隔
-notice_interval = [10*60, 10*60, 10*60, 10*60, ]
+notice_interval = [10 * 60, 10 * 60, 10 * 60, 10 * 60, ]
 
 # 睡眠的时间
 no_task_sleep_time = 10
 
+
+# 强制多次通知, 会照成回调TRY_TIME * TRY_TIME 次的情况
+enforce_repeate_notice = False
 
 # 通知的进程数
 NOTICE_THREADS_NUM = 3
@@ -34,7 +37,8 @@ redis_db = 0
 # redis的密码
 redis_auth = ''
 
-REDIS_TASK_KEY = "6y:apk:subpackage:task"
+redis_message_storge = "6y:message:notice:task"
+redis_tmp_message_storge = "6y:message:notice:tmptask"
 
 
 # -**********************- 日志的配置 -**********************-

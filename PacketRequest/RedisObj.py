@@ -2,7 +2,7 @@
 import time
 import json
 import redis
-import BaseObj
+from BaseObj import BaseObj
 import settings
 
 

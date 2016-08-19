@@ -16,5 +16,6 @@ def get_data(url, data):
 operator = {"post": post_data, "get": get_data, }
 
 
-def request_data(type, url, data):
-    data = operator.get(type)(url, data)
+def request_data(request_type, url, data):
+    data = operator.get(request_type)(url, data)
+    return data

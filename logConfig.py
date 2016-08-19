@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 import os
 import time
-import config
+import settings
 
 
 def mkdir_log_path(log_dir):
@@ -14,7 +14,7 @@ def mkdir_log_path(log_dir):
 # 日志配置文件
 def logging_file_path(log_type):
     date = time.strftime("%m%d", time.localtime())
-    log_path = os.path.join(config.logging_directory_path, date)
+    log_path = os.path.join(settings.logging_directory_path, date)
     mkdir_log_path(log_path)
     return os.path.join(log_path, "%s.log" % log_type)
 
