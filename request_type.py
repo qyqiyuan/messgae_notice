@@ -1,16 +1,16 @@
 #!/usr/bin/env python2.7
-# -*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
 from __future__ import division
 import requests
 
 
 def post_data(url, data):
-    r = requests.post(url, data=data)
+    r = requests.post(url, data=data, timeout=1)
     return r.text
 
 
 def get_data(url, data):
-    r = requests.get(url, params=data)
+    r = requests.get(url, params=data, timeout=1)
     return r.text
 
 operator = {"post": post_data, "get": get_data, }

@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
 
 #  -*--*--*--*--*--*--*--*- global   -*--*--*--*--*--*--*--*-
 # 调试模式开关
@@ -16,7 +16,7 @@ no_task_sleep_time = 10
 
 
 # 强制多次通知, 会照成回调TRY_TIME * TRY_TIME 次的情况
-enforce_repeate_notice = False
+enforce_repeate_notice = True
 
 # 通知的进程数
 NOTICE_THREADS_NUM = 3
@@ -26,7 +26,7 @@ NOTICE_THREADS_NUM = 3
 task_type = 'redis'
 
 # redis的IP地址
-redis_host = '192.168.1.28'
+redis_host = '121.199.34.235'
 
 # redis的端口
 redis_port = 6379
@@ -35,7 +35,7 @@ redis_port = 6379
 redis_db = 0
 
 # redis的密码
-redis_auth = ''
+redis_auth = 'uid'
 
 redis_message_storge = "6y:message:notice:task"
 redis_tmp_message_storge = "6y:message:notice:tmptask"

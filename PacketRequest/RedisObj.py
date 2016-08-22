@@ -4,6 +4,10 @@ import json
 import redis
 from BaseObj import BaseObj
 import settings
+import logConfig
+import logging.config
+logging.config.dictConfig(logConfig.LOGGING)
+logger = logging.getLogger('notice')
 
 
 class RedisObj(BaseObj):
@@ -16,16 +20,14 @@ class RedisObj(BaseObj):
 
     def get_redis_pool(self):
         redis_handler = redis.ConnectionPool(host=self.__redis_host,
-                           port=self.__redis_port, db=self.__redis_db, password=self.__redis_auth)
-        if self.__redis_auth.strip() != '':
-            pass
-
+                            port=self.__redis_port, db=self.__redis_db, password=self.__redis_auth)
         return redis_handler
 
     def get_task(self, key):
         redis_con = redis.Redis(connection_pool=self.get_redis_pool())
         task_info = redis_con.lpop(key)
         while not task_info:
+            logger.debug("no task, sleep %s." % (self.redis_sleep_time))
             time.sleep(self.redis_sleep_time)
             task_info = redis_con.lpop(key)
         task_info = json.loads(task_info)

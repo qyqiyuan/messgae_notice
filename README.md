@@ -5,7 +5,7 @@
 ```
 {
     url: http://X/x.php,
-    http_method: post(默认)|get
+    http_method: post|get(默认)
     content_type: form(默认)|json|xml
     data：a=1&b=2|{"a":1, "b":2}|..
     callbak_url: http://X/xx.php  (可选参数，如果有此参数那么回调通知也需要重复通知，即最多5*5次通知)
