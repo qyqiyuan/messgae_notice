@@ -10,8 +10,8 @@ class BaseObj(object):
 
     @abstractmethod
     def get_task(self, key):
-         pass
-         
+        pass
+
     @abstractmethod
     def push_task(self, key, data):
         pass

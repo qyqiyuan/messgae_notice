@@ -26,11 +26,8 @@ class RedisObj(BaseObj):
     def get_task(self, key):
         redis_con = redis.Redis(connection_pool=self.get_redis_pool())
         task_info = redis_con.lpop(key)
-        while not task_info:
-            logger.debug("no task, sleep %s." % (self.redis_sleep_time))
-            time.sleep(self.redis_sleep_time)
-            task_info = redis_con.lpop(key)
-        task_info = json.loads(task_info)
+        if task_info:
+            task_info = json.loads(task_info)
         return task_info
 
     def push_task(self, key, data, reverse=False):

@@ -1,0 +1,8 @@
+{
+    "url": "http://ajun.tunnel.qydev.com/test3.php",
+    "http_method": "post",
+    "content_type": "form",
+    "data": "a=1&b=2",
+    "callback_url": "http://ajun.tunnel.qydev.com/test4.php",
+    "success_flag": "success"
+}
