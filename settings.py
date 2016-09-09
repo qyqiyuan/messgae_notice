@@ -9,14 +9,14 @@ DEBUG = True
 TRY_TIME = 5
 
 # 尝试的时间间隔
-notice_interval = [10 * 60, 10 * 60, 10 * 60, 10 * 60, ]
+notice_interval = [2, 2, 2, 2, ]
 
 # 睡眠的时间
 no_task_sleep_time = 10
 
 
 # 强制多次通知, 会照成回调TRY_TIME * TRY_TIME 次的情况
-enforce_repeate_notice = True
+enforce_repeate_notice = False
 
 # 通知的进程数
 NOTICE_THREADS_NUM = 3
@@ -44,4 +44,4 @@ redis_tmp_message_storge = "6y:message:notice:tmptask"
 # -**********************- 日志的配置 -**********************-
 
 # 日志文件夹的根目录
-logging_directory_path = 'log'
+logging_directory_path = '/home/qy/message_notice/log'

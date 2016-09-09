@@ -1,0 +1,94 @@
+#!/bin/bash
+### BEGIN INIT INFO
+#
+# Provides:	 location_server
+# Required-Start:	$local_fs  $remote_fs
+# Required-Stop:	$local_fs  $remote_fs
+# Default-Start: 	2 3 4 5
+# Default-Stop: 	0 1 6
+# Short-Description:	initscript
+# Description: 	This file should be used to construct scripts to be placed in /etc/init.d.
+#
+### END INIT INFO
+
+## Fill in name of program here.
+PROG_PATH="/home/qy/message_notice"
+PROG_Name='MessageNotice'
+PROG=$PROG_Name".py"
+PROG_pid=$PROG_Name".pid"
+exc_identity="python"
+
+
+start() {
+    EXC_USERS=`ps -ef|awk '/'$PROG'/{print $8}'`
+    for user in $EXC_USERS
+    do
+    	if [ $user'x' == $exc_identity'x' ] ;then
+    		echo $PROG' already running...'
+    		exit 0
+    	fi
+    done
+    echo 'start '$PROG'...'
+    python $PROG_PATH/$PROG
+}
+
+stop() {
+    EXC_RESULTS=`ps -ef|grep $PROG`
+    IFS_old=$IFS
+    IFS=$'\n'
+    for user in $EXC_RESULTS
+    do
+    	EXC_USER=`echo $user|awk '{print $8}' `
+    	if [ $EXC_USER'x' == $exc_identity'x' ] ;then
+    	    kill -USR2 $(echo $user|awk '{print $2}')
+            echo $PROG' is stopd.'
+            exit 0
+    	fi
+    done
+    IFS=$IFS_old
+    echo $PROG' is not run.'
+
+}
+
+status() {
+    EXC_USERS=`ps -ef|awk '/'$PROG'/{print $8}'`
+    for user in $EXC_USERS
+    do
+    	if [ $user'x' == $exc_identity'x' ] ;then
+    		echo $PROG' is running...'
+    		exit 0
+    	fi
+    done
+    echo $PROG' is not run'
+}
+
+## Check to see if we are running as root first.
+## Found at http://www.cyberciti.biz/tips/shell-root-user-check-script.html
+if [ "$(id -u)" != "0" ]; then
+    echo "This script must be run as root" 1>&2
+    exit 1
+fi
+
+case "$1" in
+    start)
+        start
+        exit 0
+    ;;
+    stop)
+        stop
+        exit 0
+    ;;
+    status)
+        status
+        exit 0
+    ;;
+    reload|restart|force-reload)
+        stop
+        start
+        exit 0
+    ;;
+    **)
+        echo "Usage: $0 {start|stop|reload}" 1>&2
+        exit 1
+    ;;
+esac
