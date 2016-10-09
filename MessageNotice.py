@@ -28,7 +28,7 @@ class MessageNotice(object):
         self.__notice_count = 0
         self.__notice_interval = settings.notice_interval
         self.__message_storge_key = settings.redis_message_storge
-        self.__tmp_message_storge_key = settings.redis_tmp_message_storge
+        self.__backup_message_storge_key = settings.redis_backup_message_storge
         self.__notice_success = False
         self.__request_data = None
         self.__response_data = None
@@ -59,7 +59,7 @@ class MessageNotice(object):
         callbak_data = {
             'url': self.__message.get("callback_url"),
             'http_method': "get",
-            'content_type': "form",
+            'content_type': "query_string",
             'data': None,
         }
         self.push_message(key=self.__message_storge_key, message=callbak_data, reverse=True)
@@ -109,12 +109,12 @@ class MessageNotice(object):
     def message_restore(self):
         logger.debug("准备进行通知任务恢复.......")
         get_task_count = task.get_task_handle("get_task_count")
-        upload_task_count = get_task_count(self.__tmp_message_storge_key)
+        upload_task_count = get_task_count(self.__backup_message_storge_key)
         if upload_task_count:
             get_task = task.get_task_handle("get_task")
             push_task = task.get_task_handle("push_task")
             for count in range(upload_task_count):
-                message = get_task(self.__tmp_message_storge_key)
+                message = get_task(self.__backup_message_storge_key)
                 logger.debug("恢复%s:" % message.get("url"))
                 push_task(self.__message_storge_key, message, reverse=True)
             logger.debug("任务恢复完成........")
@@ -134,22 +134,23 @@ class MessageNotice(object):
             time.sleep(self.sleep_time)
             return
         # 通知前先备份
-        self.push_message(key=self.__tmp_message_storge_key, message=self.__message)
+        self.push_message(key=self.__backup_message_storge_key, message=self.__message)
         # logger.debug("取到一个任务:%s" % (self.__message))
         # 设置通知号
         self.__notice_count = self.__message.get("notice_count", 0) + 1
         # 按通知次数号分别处理
         if self.__notice_count == 1:
             # 第一次通知，通知数据格式封装好
-            self.__request_data = get_request_data(self.__message.get("content_type", "form"),
+            self.__request_data = get_request_data(self.__message.get("content_type", "query_string"),
                                                    self.__message.get("data", None))
         else:
             # 不是第一次通知
             # 检查时间到没到，没到就扔回队列尾部去
+            # todo 扔到哪里
             if self.__message.get("notice_time") > time.time():
                 self.push_message(key=self.__message_storge_key, message=self.__message)
                 # 删除备份
-                self.del_message(key=self.__tmp_message_storge_key, message=self.__message)
+                self.del_message(key=self.__backup_message_storge_key, message=self.__message)
                 # 打个时间未到的日志
                 # logger.debug("%s 通知时间未到" % self.__message.get("url"))
                 return
@@ -166,12 +167,12 @@ class MessageNotice(object):
             logger.debug("第%s次通知%s成功,返回值:%s" % (self.__notice_count,
                          self.__message.get("url"), self.__response_data))
             # 删除备份
-            self.del_message(key=self.__tmp_message_storge_key, message=self.__message)
+            self.del_message(key=self.__backup_message_storge_key, message=self.__message)
         except Exception as e:
             logger.warning("第%d次通知%s失败，原因%s：" % (self.__message.get
                            ("notice_count", 1), self.__message.get("url"), e))
             # 删除备份
-            self.del_message(key=self.__tmp_message_storge_key, message=self.__message)
+            self.del_message(key=self.__backup_message_storge_key, message=self.__message)
             return
         else:
             # 记录是否成功过
@@ -191,7 +192,7 @@ class MessageControl(object):
         self.__be_kill = False
         self.__sleep_time = settings.no_task_sleep_time
         self.__message_storge_key = settings.redis_message_storge
-        self.__tmp_message_storge_key = settings.redis_tmp_message_storge
+        self.__backup_message_storge_key = settings.redis_backup_message_storge
         self.NOTICE_THREADS_NUM = settings.NOTICE_THREADS_NUM
 
     def setQuit(self, pid, signal_num):

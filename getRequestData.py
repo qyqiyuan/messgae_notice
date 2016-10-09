@@ -5,7 +5,7 @@ import urlparse
 import json
 
 
-def get_form_data(data):
+def get_queryString_data(data):
     try:
         data = urlparse.parse_qs(data)
     except:
@@ -22,7 +22,7 @@ def get_json_data(data):
     finally:
         return data
 
-operator = {"form": get_form_data, "json": get_json_data, }
+operator = {"query_string": get_queryString_data, "json": get_json_data, }
 
 
 def get_request_data(type, data):

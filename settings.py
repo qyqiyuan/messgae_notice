@@ -38,7 +38,7 @@ redis_db = 0
 redis_auth = 'uid'
 
 redis_message_storge = "6y:message:notice:task"
-redis_tmp_message_storge = "6y:message:notice:tmptask"
+redis_backup_message_storge = "6y:message:notice:tmptask"
 
 
 # -**********************- 日志的配置 -**********************-

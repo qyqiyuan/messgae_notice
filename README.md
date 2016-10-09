@@ -6,7 +6,7 @@
 {
     url: http://X/x.php,
     http_method: post|get(默认)
-    content_type: form(默认)|json|xml
+    content_type: query_string(默认)|json|xml
     data：a=1&b=2|{"a":1, "b":2}|..
     callbak_url: http://X/xx.php  (可选参数，如果有此参数那么回调通知也需要重复通知，即最多5*5次通知)
     success_flag:xxxxx (默认 success)
@@ -15,7 +15,7 @@
 ## get_message_data()的定义
 根据`http_method`确定使用   `requests`的`get`方法还是`post`方法
 根据 `content_type` 生成数据格式（使用`requests`无论是`post`还是`get`数据都是字典形的，不同的只有参数是`data`还是`params`）
-- form : urlparse.parse_qs(data)
+- query_string : urlparse.parse_qs(data)
 - json : 直接json.loads(data)
 - xml : 待写
 
@@ -42,7 +42,7 @@
  {
      'url': xxx.php(原callbak_url),
      'http_method': "get",
-     'content_type': "form",
+     'content_type': "query_string",
      'data': None,
  }
 
@@ -65,7 +65,7 @@ message["notice_time"] = time.time() +\
 {
     url: http://X/x.php,
     http_method: post(默认)|get
-    content_type: form(默认)|json|xml
+    content_type: query_string(默认)|json|xml
     data：a=1&b=2|{"a":1, "b":2}|..
     callbak_url: http://X/xx.php  (可选参数，如果有此参数那么回调通知也需要重复通知，即最多5*5次通知)
     success_flag:xxxxx (默认 success)
